@@ -5,7 +5,11 @@
 It moves away from complex spreadsheets, offering an interactive **Drag & Drop** interface to manage your starting lineup, bench, and transfer targets. Built with simplicity and performance in mind, it uses a local SQLite database, making it portable and easy to set up without complex server configurations.
 
 
-## ✨ Key Features
+[FMPLANNER](https://github.com/user-attachments/assets/5276308a-fd8e-4a44-86d0-5cc12ed534ce)
+
+
+
+## ✨ Key Features!
 
 ### 🏟️ Squad Management
 * **Interactive Pitch View:** Visualize your formation with a dynamic pitch interface.
@@ -40,3 +44,4 @@ It moves away from complex spreadsheets, offering an interactive **Drag & Drop**
 * **Database:** SQLite 3 (Serverless, zero-configuration)
 * **Frontend:** HTML5, CSS3 (Grid/Flexbox), Vanilla JavaScript
 * **Interactions:** HTML5 Drag and Drop API, Fetch API
+
