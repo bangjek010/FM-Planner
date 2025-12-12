@@ -1,0 +1,1058 @@
+/* DEFINISI WARNA DEFAULT (CSS VARIABLES) */
+:root {
+    /* Background App */
+    --bg-main: #ffffff;
+    
+    /* Pitch / Lapangan (2 Warna untuk pola rumput) */
+    --pitch-dark: #4b8b3b;
+    --pitch-light: #529642;
+    
+    /* Table Colors */
+    --tbl-header: #b2bec3;
+    --tbl-row-odd: #ecf0f1;
+    --tbl-row-even: #e6e9ed; /* Sedikit beda agar selang seling (opsional) */
+    
+/* 1. Goalkeeper (Kuning Emas) */
+    --c-gk: #6a5dcf; 
+
+    /* 2. Defenders (Biru) */
+    --c-def: #246591;       /* Biru Tua (CB, RB, LB) */
+    --c-wb:  #4faceb;       /* Biru Terang (WB, WBR, WBL) */
+
+    /* 3. Midfielders (Hijau & Teal) */
+    --c-dm:       #4f94c2;  /* Teal Gelap (DM) */
+    --c-mid:      #27ae60;  /* Hijau (CM) */
+    --c-mid-wing: #65e49a;  /* Hijau Muda (MR, ML) */
+
+    /* 4. Attackers (Merah & Oranye) */
+    --c-amc:  #e67e22;      /* Oranye (AMC) */
+    --c-wing: #c5733d;      /* Oranye Kemerahan (RW, LW) */
+    --c-att:  #cf3928;      /* Merah (ST, CF, SS) */
+}
+
+/* Terapkan Variable ke Body */
+body {
+    margin: 0;
+    font-family: 'Roboto Condensed', sans-serif;
+    background: var(--bg-main);
+    color: #2d3436;
+    /* PERBAIKAN DI SINI */
+    min-height: 100vh;  /* Minimal setinggi layar, tapi bisa lebih */
+    height: auto;       /* Biarkan tinggi menyesuaikan isi */
+    overflow-y: auto;   /* Munculkan scrollbar jika konten panjang */
+    overflow-x: hidden; /* Sembunyikan scroll samping */
+}
+
+/* Header */
+header { background: var(--g); height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 2rem; color: #fff; }
+.brand { font-family: 'Oswald'; font-size: 2rem; font-weight: 700; }
+nav a { color: #aebfb5; text-decoration: none; font-family: 'Oswald'; font-size: 1.4rem; margin: 0 15px; text-transform: uppercase; }
+nav a.active { color: #f1c40f; }
+
+/* Layout */
+.container {
+    display: flex;
+    /* PERBAIKAN DI SINI */
+    height: auto;       /* Jangan dipaksa calc(100vh - 60px) */
+    min-height: calc(100vh - 60px); 
+    padding: 20px;
+    gap: 20px;
+    box-sizing: border-box; /* Agar padding tidak menambah lebar total */
+}
+.pitch-wrap { flex: 4; background: #fff; border: 2px solid #95a5a6; border-radius: 5px; display: flex; flex-direction: column; padding: 10px; }
+.data-wrap { flex: 6; display: flex; flex-direction: column; }
+
+/* Pitch */
+.pitch-header { height: 25px; background: #ecf0f1; border-bottom: 1px solid #bdc3c7; margin-bottom: 5px; display: flex; align-items: center; padding-left: 10px; }
+.dots span { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #bdc3c7; margin-right: 5px; border: 1px solid #95a5a6; }
+.dots span:first-child { background: #f1c40f; }
+
+.slot {
+    position: absolute;
+    width: 80px;
+    height: 50px;
+    background: var(--slot-bg);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%); /* Agar koordinat di tengah */
+    z-index: 1; /* Di bawah kartu pemain */
+    border: 1px dashed rgba(255,255,255,0.1);
+    transition: background 0.2s;
+}
+
+.slot::after {
+    content: '+';
+    color: rgba(255,255,255,0.3);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Saat didrag over */
+.slot.drag-over {
+    background: var(--slot-hover);
+    border-color: #f1c40f;
+}
+
+.pitch { 
+    flex: 1; 
+    position: relative; 
+    border: 3px solid #fff; 
+    /* Gunakan Variable Pitch */
+    background: repeating-linear-gradient(
+        0deg, 
+        var(--pitch-dark), 
+        var(--pitch-dark) 40px, 
+        var(--pitch-light) 40px, 
+        var(--pitch-light) 80px
+    ); 
+    overflow: hidden; 
+}
+.lines { position: absolute; border: 2px solid rgba(255,255,255,0.7); }
+.outline { width: 94%; height: 94%; top: 3%; left: 3%; }
+.center-line { width: 94%; top: 50%; left: 3%; border-top: 2px solid rgba(255,255,255,0.7); }
+.center-circle { width: 100px; height: 100px; top: 50%; left: 50%; border-radius: 50%; transform: translate(-50%, -50%); }
+.box-top { width: 40%; height: 15%; top: 3%; left: 30%; border-top: none; }
+.box-bottom { width: 40%; height: 15%; bottom: 3%; left: 30%; border-bottom: none; }
+
+/* Cards */
+.card {
+    position: absolute;
+    width: 80px;  /* Dikurangi dari 90px */
+    height: 76px; /* Dikurangi dari 85px */
+    background: linear-gradient(to bottom, #ffffff 0%, #f1f2f6 100%);
+    border: 1px solid #bdc3c7;
+    border-radius: 5px; /* Radius sedikit dikecilkan */
+    z-index: 10;
+    cursor: grab;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.25), 0 1px 2px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Efek saat mouse diarahkan ke kartu */
+.card:hover {
+    transform: translateY(-3px) scale(1.05); /* Scale sedikit lebih besar agar jelas saat hover */
+    box-shadow: 0 8px 12px rgba(0,0,0,0.35);
+    border-color: #f1c40f;
+    z-index: 50;
+}
+
+.card:active {
+    cursor: grabbing;
+    transform: scale(0.95);
+    opacity: 0.9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 100;
+}
+
+.card-header {
+    height: 16px; /* Dikurangi dari 20px */
+    color: white;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 0.65rem; /* Font header lebih kecil */
+    text-align: center;
+    line-height: 16px;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+    letter-spacing: 0.5px;
+}
+
+.custom-pos { transform: translate(-50%, -50%); }
+.custom-pos:hover { transform: translate(-50%, -53%) scale(1.05); }
+.c-name span {
+    display: inline-block;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    margin: 0 1px;
+}
+/* Default Positions (4-3-3) */
+.def-pos-1 { bottom: 5%; left: 50%; transform: translateX(-50%); }
+.def-pos-2 { bottom: 25%; right: 10%; } .def-pos-3 { bottom: 25%; left: 10%; }
+.def-pos-4 { bottom: 20%; right: 35%; } .def-pos-5 { bottom: 20%; left: 35%; }
+.def-pos-6 { bottom: 40%; left: 50%; transform: translateX(-50%); }
+.def-pos-7 { bottom: 55%; right: 25%; } .def-pos-8 { bottom: 55%; left: 25%; }
+.def-pos-9 { top: 20%; right: 15%; } .def-pos-10 { top: 20%; left: 15%; }
+.def-pos-11 { top: 15%; left: 50%; transform: translateX(-50%); }
+
+/* Update Bagian Nama Pemain agar STRICT 2 Baris */
+.c-name {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #2d3436;
+    
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.6rem; /* Font nama dikecilkan */
+    text-align: center;
+    padding: 1px 2px;
+    
+    line-height: 1;
+    max-height: 32px; 
+    overflow: hidden;
+}
+
+.c-name div:last-child {
+    margin-top: 1px;
+    transform: scale(0.9); /* Icon diperkecil sedikit */
+}
+.c-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: #dfe6e9;
+    border-top: 1px solid #b2bec3;
+    height: 26px; /* Dikurangi dari 30px */
+}
+
+.stat-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.stat-col:first-child {
+    border-right: 1px solid #bdc3c7;
+}
+.stat-row {
+    width: 100%;
+    text-align: center;
+    font-size: 0.55rem; /* Font angka dikecilkan */
+    line-height: 12px;
+    font-weight: 700;
+    color: #2d3436;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.stat-label {
+    font-size: 0.45rem; /* Label (Age, Rat) sangat kecil tapi terbaca */
+    color: #636e72;
+    margin-right: 1px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+/* Warna Khusus untuk Peak & Pot (Kuning Emas) */
+.gold-text {
+    color: #d35400; /* Orange tua agar terbaca di background terang */
+    font-weight: 800;
+}
+
+.c-stats { 
+    display: flex; 
+    justify-content: space-around; 
+    padding: 2px; 
+    flex: 1; /* Isi ruang tengah */
+    align-items: center;
+}
+.c-stats small { font-size: 0.6rem; color: #7f8c8d; display: block; line-height: 1; }
+.c-footer { 
+    background: #2d3436; 
+    color: #fff; 
+    font-size: 0.6rem; 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 2px 4px; 
+}
+/* Tables & UI */
+.team-info { text-align: center; margin-bottom: 10px; }
+.team-info h1 { background: #dcdcdc; border: 1px solid #7f8c8d; display: inline-block; padding: 5px 30px; margin: 0; font-size: 1.8rem; cursor: pointer; }
+.season-tag { background: #dcdcdc; border: 1px solid #7f8c8d; display: inline-block; padding: 2px 15px; font-weight: bold; margin-top: 5px; }
+.toolbar { display: flex; justify-content: space-between; margin-bottom: 5px; }
+
+/* Buttons & Modal */
+.btn { border: none; padding: 5px 12px; border-radius: 3px; cursor: pointer; font-weight: bold; }
+.btn-green { background: #bce79f; color: #000000; }
+.btn-dark { background: var(--dk); color: #000000; }
+.btn-red { background: #e74c3c; color: #000000; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; justify-content: center; align-items: center; }
+.m-content { background: #ecf0f1; padding: 20px; border: 2px solid #7f8c8d; width: 320px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+.m-content input, .m-content select { width: 100%; padding: 6px; margin-bottom: 10px; border: 1px solid #bdc3c7; box-sizing: border-box; }
+.row { display: flex; gap: 10px; }
+.m-footer { display: flex; gap: 10px; justify-content: space-between; margin-top: 10px; }
+.row input { width: 100%; box-sizing: border-box; }
+/* Dark Mode */
+body.dark { --bg: #2c3e50; --dk: #ecf0f1; }
+body.dark .pitch-wrap, body.dark .data-wrap { filter: brightness(0.9); }
+
+/* Tactic Switcher Dots */
+.dots { display: flex; gap: 5px; cursor: pointer; }
+.dot { 
+    display: inline-block; width: 14px; height: 14px; 
+    border-radius: 50%; 
+    background: #bdc3c7; /* Abu-abu (Tidak Aktif) */
+    border: 1px solid #7f8c8d;
+    transition: background 0.3s;
+}
+.dot:hover { background: #95a5a6; }
+
+/* Warna Kuning untuk Dot Aktif */
+.dot.active { background: #f1c40f; border-color: #d35400; box-shadow: 0 0 5px rgba(241, 196, 15, 0.5); }
+
+.tactic-label { margin-left: auto; font-size: 0.8rem; color: #7f8c8d; font-weight: bold; }
+.sub-header {
+    border-top: 2px solid #7f8c8d; 
+}
+
+/* ========================================= */
+/* FIX TABEL PRESISI & SIMETRIS (ANTI-GESER) */
+/* ========================================= */
+
+/* 1. Container Tabel */
+.tables { 
+    display: flex; 
+    width: 100%;
+    background: #fff;
+    border: 2px solid #7f8c8d;
+    box-sizing: border-box;
+}
+
+.tbl-col { 
+    flex: 1; 
+    width: 50%; /* Paksa lebar container 50% */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Cegah container melar */
+}
+
+.br-left { 
+    border-left: 2px solid #7f8c8d; 
+}
+
+/* 2. Header Judul (1ST TEAM, SUBS, dll) */
+.th-main, .sub-header { 
+    background: #b2bec3;
+    text-align: center; 
+    font-weight: bold; 
+    padding: 6px 0;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    font-size: 0.95rem;
+    margin: 0;
+    width: 100%;
+}
+
+.sub-header { border-top: 2px solid #7f8c8d; }
+
+/* 3. Struktur Tabel (KUNCI UTAMA) */
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    table-layout: fixed; /* WAJIB: Kolom tidak akan berubah lebar meski isi teks panjang */
+    margin: 0;
+    border-spacing: 0;
+}
+
+/* 4. Pengaturan Lebar Kolom (TOTAL HARUS 100%) */
+/* Kita set lebar spesifik untuk Header (th) DAN Isi (td) agar sinkron */
+
+/* Kolom 1: Pos (Kecil) */
+.tables th:nth-child(1), .tables td:nth-child(1) { width: 8%; }
+
+/* Kolom 2: Name (Paling Lebar) */
+.tables th:nth-child(2), .tables td:nth-child(2) { width: 62%; }
+
+/* Kolom 3, 4, 5: Age, Rat, Pot (Sama rata) */
+.tables th:nth-child(3), .tables td:nth-child(3) { width: 10%; }
+.tables th:nth-child(4), .tables td:nth-child(4) { width: 10%; }
+.tables th:nth-child(5), .tables td:nth-child(5) { width: 10%; }
+
+/* 5. Styling Baris & Sel */
+.tables tbody tr {
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
+
+    
+}
+
+/* Efek Hover Baris (Interaktif) */
+.tables tbody tr:hover {
+    background-color: #e3f2fd; /* Biru sangat muda saat hover */
+    cursor: pointer;
+    transform: scale(1); /* Trigger hardware acceleration */
+}
+
+/* Baris saat didrag */
+.tables tbody tr:active {
+    background-color: #ffeaa7;
+    cursor: grabbing;
+}
+
+td {
+    padding: 0 8px;
+    font-size: 0.85rem;
+    color: #2d3436;
+    border: none; /* Hapus semua border vertikal */
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+td, th { 
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    padding: 0 4px; /* Padding kecil saja */
+    text-align: center; 
+    font-size: 0.85rem; 
+
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
+    white-space: nowrap;      /* Teks dilarang turun baris */
+    overflow: hidden;         /* Sembunyikan teks yang kepanjangan */
+    text-overflow: ellipsis;  /* Ganti sisa teks dengan ... */
+    box-sizing: border-box;   /* Padding dihitung dalam lebar */
+}
+
+/* Hapus border kanan di kolom terakhir */
+td:last-child, th:last-child { border-right: 1; }
+
+/* Header Kolom */
+.tables thead th { 
+    background: #bee4f5; 
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    color: #2d3436;
+}
+
+
+/* Warna Baris & Hover */
+.tables tbody tr:nth-child(odd) td { background: #fdfdfd; }
+.tables tbody tr:nth-child(even) td { background: #f4f6f7; }
+.tables tbody tr:hover td { background: #dcdde1; cursor: pointer; }
+
+/* Style Khusus */
+.badge {
+    /* Layout & Size */
+    display: inline-flex;       /* Menggunakan flex agar teks selalu di tengah sempurna */
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;            /* Sedikit lebih lebar dari sebelumnya (24px -> 28px) */
+    height: 20px;               /* Sedikit lebih tinggi (18px -> 22px) */
+    padding: 0 4px;             /* Padding horizontal agar teks tidak mepet pinggir */
+    
+    /* Typography */
+    color: #fff;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 0.75rem;         /* Ukuran font naik sedikit (0.65 -> 0.75) */
+    font-weight: 800;           /* Lebih tebal agar terbaca jelas */
+    text-transform: uppercase;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3); /* Shadow teks lebih halus tapi tajam */
+    
+    /* Visual & Shape */
+    border-radius: 4px;         /* Sudut sedikit lebih tumpul */
+    box-shadow: 
+        inset 0 1px 0 rgba(255,255,255,0.2), /* Highlight putih di atas (efek kaca) */
+        0 2px 4px rgba(0,0,0,0.15);          /* Bayangan bawah yang lebih soft */
+    
+    /* Transisi halus saat di-hover (Opsional) */
+    transition: transform 0.1s ease;
+    cursor: default;
+}
+
+.t-left div {
+    font-weight: 600;
+    color: #34495e;
+}
+
+/* Icon (HG, dll) di tabel */
+.t-left i, .t-left span {
+    opacity: 0.8;
+    transform: scale(0.9);
+}
+.t-left { text-align: left; padding-left: 8px; font-weight: 500; }
+.window-bar {
+    height: 28px;
+    background: #e0e5e9; /* Warna abu-abu bar */
+    border-bottom: 1px solid #bdc3c7;
+    margin-bottom: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    position: relative;
+}
+
+.dots-container {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+/* DOT STYLE (Traffic Light) */
+.dot { 
+    display: inline-block; 
+    width: 12px; height: 12px; 
+    border-radius: 50%; 
+    background: #bdc3c7; /* DEFAULT: ABU-ABU (Mati) */
+    border: 1px solid #95a5a6;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* Saat Hover */
+.dot:hover { filter: brightness(0.9); }
+
+/* STATE AKTIF (KUNING) */
+.dot.active { 
+    background: #f1c40f; 
+    border-color: #f39c12; 
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.2);
+}
+
+.tactic-title {
+    margin-left: auto;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #7f8c8d;
+    display: flex;
+    align-items: center;
+}
+
+.tactic-input {
+    background: transparent;
+    border: 1px solid transparent; /* Transparan saat tidak diklik */
+    color: #2c3e50;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    width: 150px;
+    text-align: right;
+    cursor: text;
+    padding: 2px 5px;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+/* Saat diklik/diedit */
+.tactic-input:focus, .tactic-input:hover {
+    background: #fff;
+    border: 1px solid #bdc3c7;
+    color: #000;
+}
+
+
+/* CSS Lainnya (Table Header) */
+
+
+/* Pastikan Modal Select terlihat rapi */
+.m-content select {
+    background: white;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 1rem;
+}
+
+/* ========================================= */
+/* LIGHTWEIGHT MODERN WELCOME OVERLAY        */
+/* ========================================= */
+
+.welcome-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    /* GANTI BLUR DENGAN WARNA SOLID TRANSPARAN (Jauh lebih ringan) */
+    background: rgba(44, 62, 80, 0.95); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    /* HAPUS backdrop-filter: blur(5px); */
+}
+
+.welcome-container {
+    background: #ffffff;
+    width: 800px;
+    max-width: 95%;
+    border-radius: 8px; /* Radius lebih kecil agar rendering lebih cepat */
+    /* Bayangan lebih simpel */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
+    overflow: hidden;
+    /* Hapus animasi slideUp jika masih lag, tapi biasanya ini oke */
+    animation: fadeIn 0.3s ease-out; 
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.welcome-header {
+    background: #045e35;
+    color: white;
+    padding: 15px; /* Padding dikurangi sedikit */
+    text-align: center;
+    border-bottom: 3px solid #f1c40f;
+}
+
+.welcome-header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+.welcome-header p { margin: 5px 0 0 0; font-size: 0.85rem; opacity: 0.9; }
+
+.welcome-grid { display: flex; min-height: 350px; }
+
+.panel-left, .panel-right { flex: 1; padding: 20px; display: flex; flex-direction: column; }
+.panel-left { background: #f1f2f6; } /* Warna solid flat */
+.panel-right { background: #ffffff; }
+
+h2 {
+    margin-top: 0; color: #2d3436; font-size: 1.1rem;
+    border-bottom: 1px solid #dfe6e9; padding-bottom: 8px; margin-bottom: 15px;
+}
+
+/* --- TEAM LIST (Optimasi Scroll) --- */
+.team-list-container {
+    flex: 1; overflow-y: auto; max-height: 250px; padding-right: 5px;
+    /* Hardware Acceleration untuk scrolling lancar */
+    transform: translateZ(0); 
+}
+
+.team-btn {
+    width: 100%; background: white; border: 1px solid #ccc;
+    padding: 10px; margin-bottom: 6px; border-radius: 4px;
+    cursor: pointer; display: flex; justify-content: space-between;
+    align-items: center; font-size: 0.95rem; font-weight: bold; color: #333;
+    transition: background 0.1s; /* Transisi dipercepat */
+}
+
+.team-btn:hover {
+    background: #045e35; color: white; border-color: #045e35;
+    /* Hapus transform translate saat hover agar tidak repaint layout */
+}
+
+.team-btn:hover .arrow-icon { color: #f1c40f; }
+
+/* --- FORM & DIVIDER --- */
+.panel-divider {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    background: white; padding: 8px; border-radius: 50%;
+    color: #b2bec3; font-weight: bold; font-size: 0.8rem;
+    border: 1px solid #ccc; z-index: 2;
+}
+.panel-divider::before {
+    content: ''; position: absolute; top: -200px; left: 50%;
+    width: 1px; height: 400px; background: #ddd; z-index: -1;
+}
+
+.input-group { margin-bottom: 12px; }
+.input-group label { display: block; font-size: 0.8rem; font-weight: bold; color: #555; margin-bottom: 4px; }
+.create-form input {
+    width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.95rem;
+}
+.create-form input:focus { border-color: #045e35; outline: none; background: #fff; }
+
+.btn-create {
+    width: 100%; padding: 12px;
+    background: #045e35; /* Warna solid, gradasi kadang berat */
+    color: white; border: none; border-radius: 4px;
+    font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 10px;
+}
+.btn-create:hover { background: #034f2c; }
+
+@media screen and (max-width: 768px) {
+    .welcome-container { width: 95%; margin: 10px; }
+    .welcome-grid { flex-direction: column; }
+    .panel-divider { position: relative; top: auto; left: auto; transform: none; margin: 10px 0; border: none; }
+    .panel-divider::before { display: none; }
+}
+
+
+
+/* MODAL LIST STYLES (Manage Team/Season) */
+.m-large { width: 450px; }
+.list-group {
+    border: 1px solid #bdc3c7; background: #fff;
+    max-height: 150px; overflow-y: auto; margin-bottom: 15px;
+}
+.list-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 10px; border-bottom: 1px solid #ecf0f1;
+}
+.list-item:hover { background: #f7f9fa; }
+.active-item { background: #d1f2eb; font-weight: bold; }
+
+.btn-text {
+    background: none; border: none; text-align: left;
+    width: 100%; cursor: pointer; font-size: 1rem; font-family: 'Roboto Condensed';
+}
+.btn-icon-del {
+    background: none; border: none; color: #e74c3c; cursor: pointer;
+}
+.btn-icon-del:hover { color: #c0392b; }
+
+/* Pointer di Judul Tim */
+.team-info h1, .season-tag { cursor: pointer; transition: opacity 0.2s; }
+.team-info h1:hover, .season-tag: { opacity: 0.7; }
+.setting-group {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.setting-group h4 { margin: 5px 0 10px 0; color: #7f8c8d; text-transform: uppercase; font-size: 0.8rem; }
+.row-center {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;
+}
+input[type="color"] {
+    border: none; width: 40px; height: 25px; cursor: pointer; background: none;
+}
+
+/* GK */
+.pos-gk { 
+    background-color: var(--c-gk) !important; 
+    text-shadow: none;
+}
+/* Defenders */
+.pos-def { background-color: var(--c-def) !important; }
+.pos-wb  { background-color: var(--c-wb) !important; }
+
+/* Midfielders */
+.pos-dm       { background-color: var(--c-dm) !important; }
+.pos-mid      { background-color: var(--c-mid) !important; }
+.pos-mid-wing { background-color: var(--c-mid-wing) !important; }
+
+/* Attackers */
+.pos-amc  { background-color: var(--c-amc) !important; }
+.pos-wing { background-color: var(--c-wing) !important; }
+.pos-att  { background-color: var(--c-att) !important; }
+
+.actions {
+        position: absolute; /* Mengatur posisi absolut */
+        top: 20px;          /* Jarak dari atas */
+        right: 20px;        /* Jarak dari kanan */
+        display: flex;      /* Agar tombol berjejer rapi */
+        gap: 10px;          /* Jarak antar tombol */
+        z-index: 1000;      /* Pastikan berada di atas elemen lain */
+    }
+
+    /* Style tambahan untuk tombol (opsional, agar terlihat bagus) */
+    .btn-white {
+        background-color: white;
+        border: 1px solid #ccc;
+        padding: 8px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-white:hover {
+        background-color: #f0f0f0;
+    }
+
+/* Kolom 1: Pos (Kecil) */
+.tables th:nth-child(1), .tables td:nth-child(1) { width: 8%; }
+
+/* Kolom 2: Name (Paling Lebar) */
+.tables th:nth-child(2), .tables td:nth-child(2) { width: 62%; }
+
+/* Kolom 3, 4, 5: Age, Rat, Pot (Sama rata) */
+.tables th:nth-child(3), .tables td:nth-child(3) { width: 10%; }
+.tables th:nth-child(4), .tables td:nth-child(4) { width: 10%; }
+.tables th:nth-child(5), .tables td:nth-child(5) { width: 10%; }
+
+/* Pastikan sel tidak meluber */
+.tables td, .tables th {
+    overflow: hidden;
+    white-space: nowrap; /* Teks tidak turun baris */
+    text-overflow: ellipsis; /* ... jika kepanjangan */
+    box-sizing: border-box; /* Padding dihitung dalam lebar */
+}
+    /* ========================================= */
+/* RESPONSIVE DESIGN (MOBILE & TABLET)       */
+/* ========================================= */
+
+@media screen and (max-width: 1024px) {
+    /* 1. BODY & SCROLLING */
+    /* Di HP/Tablet, kita butuh scroll, tidak bisa fixed 100vh */
+    body {
+        height: auto;
+        overflow-y: auto; /* Aktifkan scroll vertikal */
+        overflow-x: hidden;
+    }
+
+    /* 2. HEADER */
+    header {
+        height: auto;
+        flex-direction: column;
+        padding: 15px;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .nav-menu {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .actions {
+        position: static; /* Tidak lagi absolute di pojok */
+        margin-top: 10px;
+        justify-content: center;
+    }
+
+    /* 3. MAIN CONTAINER (LAYOUT) */
+    .container {
+        flex-direction: column; /* Ubah dari Kiri-Kanan jadi Atas-Bawah */
+        height: auto;
+        padding: 10px;
+    }
+
+    /* 4. PITCH AREA (LAPANGAN) */
+    .pitch-wrap {
+        width: 100%;
+        /* Berikan tinggi tetap agar lapangan tidak gepeng di HP */
+        height: 750px; 
+        flex: none; /* Jangan flex, tapi fixed height */
+        margin-bottom: 20px;
+    }
+
+    /* 5. DATA AREA (KANAN JADI BAWAH) */
+    .data-wrap {
+        width: 100%;
+        flex: none;
+    }
+
+    /* 6. TABLES (TABEL) */
+    .tables {
+        flex-direction: column; /* Tabel 1st Team di atas 2nd Team */
+    }
+
+    .tbl-col {
+        width: 100%;
+        border-right: 1; /* Hapus garis pemisah tengah */
+    }
+
+    .br-left {
+        border-left: none;
+        border-top: 2px solid #7f8c8d; /* Ganti jadi garis pemisah atas */
+        margin-top: 20px;
+    }
+    
+    /* Tabel Font Size di HP biar muat */
+    td, th {
+        font-size: 0.8rem;
+        padding: 2px;
+    }
+}
+
+/* KHUSUS UNTUK HP KECIL (Portrait < 600px) */
+@media screen and (max-width: 600px) {
+    .pitch-wrap {
+        height: 600px; /* Lapangan sedikit lebih pendek */
+    }
+
+    /* Kecilkan kartu sedikit agar muat banyak */
+    .card {
+        width: 75px;
+        height: 70px;
+        font-size: 0.7rem;
+    }
+    .slot {
+        width: 75px;
+        height: 45px;
+    }
+    
+    .c-name {
+        font-size: 0.6rem;
+    }
+    
+    .c-stats-grid {
+        height: 28px;
+    }
+    
+    .stat-row { font-size: 0.55rem; }
+    .stat-label { font-size: 0.5rem; }
+
+    /* Sembunyikan kolom Potensi/Rating di Tabel jika terlalu sempit */
+    /* Opsional: uncomment jika tabel terlalu lebar */
+    /* 
+    .tables th:nth-child(4), .tables td:nth-child(4),
+    .tables th:nth-child(5), .tables td:nth-child(5) {
+        display: none; 
+    } 
+    */
+}
+
+.btn-blue {
+    background: #3498db; 
+    color: #fff;
+}
+.btn-blue:hover {
+    background: #2980b9;
+}
+
+/* ========================================= */
+/* SUBS SIDEBAR (TAMPILAN SAMPING LAPANGAN)  */
+/* ========================================= */
+
+/* Wrapper untuk menggabungkan Pitch + Subs */
+.pitch-row {
+    display: flex;
+    flex: 1;
+    gap: 10px;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Sidebar Container */
+.subs-sidebar {
+    width: 220px; /* Lebar sedikit ditambah agar kartu tidak sesak */
+    background: #ffffff;
+    border-radius: 8px; /* Sudut membulat */
+    display: flex;
+    flex-direction: column;
+    /* Bayangan modern (Elevation) */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+    border: 1px solid #f1f2f6; /* Border sangat tipis/halus */
+    overflow: hidden;
+}
+
+/* Header "Subs" */
+.subs-header-title {
+    background: #f8f9fa; /* Abu-abu sangat muda */
+    color: #2d3436;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem; /* Ukuran font tidak perlu terlalu besar */
+    text-align: center;
+    font-weight: 600;
+    padding: 12px 0;
+    border-bottom: 1px solid #dfe6e9;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Grid Area untuk Kartu */
+.subs-grid {
+    flex: 1;
+    display: grid;
+    /* Grid otomatis: menyesuaikan lebar, minimal 90px per kolom */
+    grid-template-columns: repeat(auto-fit, minmax(85px, 1fr)); 
+    grid-auto-rows: min-content;
+    gap: 10px; /* Jarak antar kartu */
+    
+    /* === UBAH DISINI AGAR BERJARAK DARI JUDUL === */
+    /* Format: Atas | Kanan | Bawah | Kiri */
+    /* Ubah angka pertama (30px) jika ingin lebih jauh/dekat */
+    padding: 30px 15px 15px 15px; 
+    
+    overflow-y: auto; /* Scroll vertikal */
+    
+    /* Custom Scrollbar (Tipis & Modern) */
+    scrollbar-width: thin;
+    scrollbar-color: #bdc3c7 transparent;
+}
+
+/* --- OVERRIDE KARTU DI DALAM SIDEBAR --- */
+/* Agar kartu tidak melayang (absolute) saat di sidebar */
+.subs-grid .card {
+    position: absolute;
+    width: 90px;
+    height: 80px; /* Sedikit lebih tinggi agar muat 2 baris nama + stats */
+    background: #fdfdfd;
+    border: 2px solid #2d3436; /* Border lebih tebal sedikit */
+    border-radius: 6px;
+    z-index: 10;
+    cursor: grab;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.1s;
+}
+
+/* Kecilkan font sedikit untuk sidebar */
+.subs-grid .c-name { font-size: 0.6rem; }
+.subs-grid .stat-row { font-size: 0.6rem; }
+
+/* Style Slot Khusus Sidebar */
+.subs-grid .slot {
+    position: relative !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    width: 90px;  /* Samakan dengan ukuran kartu di sidebar */
+    height: 80px; 
+    margin: 0 auto;
+    background: #f0f0f0;
+    border: 1px dashed #999;
+}
+
+.subs-grid .slot::after {
+    font-size: 20px; /* Font plus lebih kecil */
+}
+
+/* --- STYLE TAB PITCH --- */
+.pitch-tabs {
+    display: flex;
+    background: #e0e5e9;
+    padding: 5px 5px 0 5px;
+    border-bottom: 1px solid #bdc3c7;
+}
+
+.tab-btn {
+    background: #dcdde1;
+    border: 1px solid #bdc3c7;
+    border-bottom: none;
+    padding: 6px 15px;
+    margin-right: 5px;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover { background: #fff; }
+
+.tab-btn.active {
+    background: #fff;
+    color: #2d3436;
+    font-weight: bold;
+    border-top: 3px solid #f1c40f; /* Garis kuning di atas tab aktif */
+}
+
+/* --- STYLE HEADER TENGAH --- */
+/* Ubah window-bar agar flex menyebar */
+.window-bar {
+    justify-content: space-between; /* Kiri, Tengah, Kanan tersebar rata */
+    padding: 0 15px; /* Tambah padding sedikit */
+}
+
+.tactic-title-center {
+    font-weight: bold;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Pastikan pitch-container mengisi penuh */
+.pitch-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
