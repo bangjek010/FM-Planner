@@ -42,4 +42,30 @@ It moves away from complex spreadsheets, offering an interactive **Drag & Drop**
 * **Frontend:** HTML5, CSS3 (Grid/Flexbox), Vanilla JavaScript
 * **Interactions:** HTML5 Drag and Drop API, Fetch API
 
+---
+
+
+## 🚀 Installation Guide (Portable Method)
+
+You can run this application as a standalone desktop program using **PHP Desktop**. No XAMPP or complex server setup is required.
+
+### Step 1: Download PHP Desktop
+1.  Visit the PHP Desktop From @cztomczak [PHP Desktop Chrome Releases](https://github.com/cztomczak/phpdesktop) page.
+2.  Download the latest Releases file (e.g., `phpdesktop-chrome-v...zip`).
+3.  **Extract** the downloaded zip file to a folder on your computer (e.g., `C:\FMPlanner`).
+
+### Step 2: Download FM Planner
+1.  Download this repository (Click **Code** > **Download ZIP**) or clone it.
+2.  Extract the files if you downloaded the ZIP.
+
+### Step 3: Setup Files
+1.  Open the **PHP Desktop** folder you extracted in Step 1.
+2.  Open the **`www`** folder inside it.
+3.  **Delete all files** currently inside the `www` folder (these are just default examples).
+4.  **Copy all FM Planner Pro files** (index.php, api.php, style.css, script.js, etc.) into this `www` folder.
+
+### Step 4: Run the App
+1.  Go back to the main folder.
+2.  Run **`phpdesktop-chrome.exe`**.
+3.  The application will launch. On the first run, it will automatically set up the database (`database.sqlite`).
 
