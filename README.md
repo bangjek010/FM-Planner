@@ -4,8 +4,6 @@
 
 It moves away from complex spreadsheets, offering an interactive **Drag & Drop** interface to manage your starting lineup, bench, and transfer targets. Built with simplicity and performance in mind, it uses a local SQLite database, making it portable and easy to set up without complex server configurations.
 
-![Dashboard Screenshot](path/to/your/screenshot.png)
-*(Replace this line with an actual screenshot of your application)*
 
 ## ✨ Key Features
 
@@ -42,15 +40,3 @@ It moves away from complex spreadsheets, offering an interactive **Drag & Drop**
 * **Database:** SQLite 3 (Serverless, zero-configuration)
 * **Frontend:** HTML5, CSS3 (Grid/Flexbox), Vanilla JavaScript
 * **Interactions:** HTML5 Drag and Drop API, Fetch API
-
----
-
-## 🚀 Installation Guide
-
-Since this project uses PHP and SQLite, you need a local web server environment (like XAMPP, WAMP, Laragon, or PHP Desktop).
-
-### Step 1: Clone or Download
-Download this repository and extract it to your web server's root folder (e.g., `htdocs` or `www`).
-
-```bash
-/htdocs/fm-planner/
